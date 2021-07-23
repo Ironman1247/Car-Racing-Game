@@ -1,0 +1,53 @@
+class Player {
+    constructor(){
+        this.name = null;
+        this.distance = 0;
+        this.index = 0;
+        this.rank = null;
+    }
+
+    getCount(){
+        var playerCountRef = database.ref("playerCount");
+        playerCountRef.on("value",(data)=>{
+            playerCount = data.val();
+        });
+    }
+    updateCount(count){
+        database.ref("/").update({
+            playerCount : count 
+        })
+    }
+
+    update(){
+        var playerIndex = "players/player"+this.index
+        database.ref(playerIndex).set({
+            name : this.name,
+            distance : this.distance,
+            rank : this.rank 
+        })
+    }
+
+   static getPlayerInfo(){
+        var playerInfoRef = database.ref("players")
+        playerInfoRef.on("value",(data)=>{
+            allPlayers = data.val();
+        }
+        )
+    }
+
+
+    getFinishedPlayers(){
+        var finishedCarsRef = database.ref("carsAtEnd")
+        finishedCarsRef.on("value",(data)=>{
+            finishedPlayers =data.val();
+        })
+
+    }
+
+    static updateFinishedPlayers(){
+        database.ref("/").update({
+            carsAtEnd : finishedPlayers + 1
+        })
+        this.rank = this.rank + 1
+    }
+}
